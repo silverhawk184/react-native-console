@@ -1,5 +1,5 @@
 {
-  "name": "react-native-console",
+  "name": "react-native-console-view",
   "version": "0.0.1",
   "description": "Built in console for react native",
   "main": "index.js",
