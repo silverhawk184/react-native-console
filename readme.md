@@ -4,6 +4,7 @@ Shows logged console messages in a View
 
 Usage: 
 **App.tsx**
+
     import React, { Component } from 'react';
     import ConsoleLog from 'react-native-console-view';
     export default class App extends Component<AppProps> {
@@ -23,6 +24,7 @@ Usage:
 
 
 **From then on**
+
     import { console } from 'react-native-console-view';
     console.log('big alert', 'lots of details');
 
