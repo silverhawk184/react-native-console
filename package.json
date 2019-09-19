@@ -1,0 +1,32 @@
+{
+  "name": "react-native-console",
+  "version": "0.0.1",
+  "description": "Built in console for react native",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/silverhawk184/react-native-console.git"
+  },
+  "author": "Nick Schild",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/silverhawk184/react-native-console/issues"
+  },
+  "homepage": "https://github.com/silverhawk184/react-native-console#readme",
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "react-redux": "^7.1.1",
+    "redux": "^4.0.4",
+    "redux-actions": "^2.6.5",
+    "reselect": "^4.0.0"
+  },
+  "dev-dependencies": {
+    "@types/node": "^12.7.5",
+    "@types/react-native": "^0.60.15",
+    "react": "^16.9.0",
+    "react-native": "^0.59.10"
+  }
+}
