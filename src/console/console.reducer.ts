@@ -78,26 +78,26 @@ export const console = {
         if (debuggingConsole)
             store.dispatch(DebugConsoleActionLog(label, message, style));
     },
-    time: (label: string) => {
+    time: (label: string, style: TextStyle = {}) => {
         const rootState = store.getState() as RootState;
         const debuggingConsole = get(rootState, 'settings.localPreference.debuggingConsole') === true;
         if (debuggingConsole)
-            console.timers[label] = Date.now();
+            console.timers[label] = {startTime: Date.now(), style};
     },
     timeEnd: (label: string) => {
         if (typeof console.timers[label] === 'undefined') return;
-        const startTime  = console.timers[label];
+        const {startTime, style}  = console.timers[label];
         const curTime = Date.now();
-        console.append(label, `${curTime - startTime}ms - timer ended`, {color: '#00FF00'});
+        console.append(label, `${curTime - startTime}ms - timer ended`, {color: '#00FF00', ...style});
         delete console.timers[label];
     },
     timeLog: (label: string) => {
         if (typeof console.timers[label] === 'undefined') return;
-        const startTime  = console.timers[label];
+        const {startTime, style}  = console.timers[label];
         const curTime = Date.now();
-        console.append(label, `${curTime - startTime}ms`, {color: '#00FF00'});
+        console.append(label, `${curTime - startTime}ms`, {color: '#00FF00', ...style});
     },
-    timers: {} as {[key: string]: number},
+    timers: {} as {[key: string]: {startTime: number, style: TextStyle}},
     logOnChange: (label: string, message: string|object, style: TextStyle) => {
         const testMessage = (typeof message === 'object') ? JSON.stringify(message) : message;
         style = {color: '#FF00FF', ...style};
