@@ -13,4 +13,4 @@ const mapDispatchToProps = (dispatch: any) => {
     };
 };
 
-export const ConsoleLog = connect(mapStateToProps, mapDispatchToProps)(ConsoleComponent);
+export const ConsoleView = connect(mapStateToProps, mapDispatchToProps)(ConsoleComponent);

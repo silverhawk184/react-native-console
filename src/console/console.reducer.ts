@@ -113,4 +113,4 @@ export const console = {
     },
     logOnChangeHistory: {} as {[key: string]: string},
 };
-export const console2 = console;
+export const consoleView = console;

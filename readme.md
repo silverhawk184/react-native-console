@@ -6,7 +6,7 @@ Usage:
 **App.tsx**
 
     import React, { Component } from 'react';
-    import ConsoleLog from 'react-native-console-view';
+    import ConsoleView from 'react-native-console-view';
     export default class App extends Component<AppProps> {
     constructor(props: AppProps) {
         super(props);
@@ -16,7 +16,7 @@ Usage:
         return (
         <Provider store={store}>
             ... app stuff ...
-            <ConsoleLog enabled={this.showLog} breakpoint="mobile" />
+            <ConsoleView enabled={this.showLog} breakpoint="mobile" />
         </Provider>
         );
     }
@@ -25,13 +25,13 @@ Usage:
 
 **From then on**
 
-    import { console } from 'react-native-console-view';
+    import { console } from 'react-native-console-view'; // or for backwards compatibility, you can use `consoleView`
     console.log('big alert', 'lots of details');
 
 ### Just like your favorite JavaScript console, this supports:
-- console.[log|warn|error](label, message, style?)
-- console.[time|timeEnd](label, style?)
-- console.logOnChange(label, message, style?) - logs when message is different or new, otherwise logs a semi-transparent "no change" statement
+- `console.[log|warn|error](label, message, style?)`
+- `console.[time|timeEnd](label, style?)`
+- `console.logOnChange(label, message, style?)` - logs when message is different or new, otherwise logs a semi-transparent "no change" statement
 
 ### On Screen Features:
 - Show and hide the console
