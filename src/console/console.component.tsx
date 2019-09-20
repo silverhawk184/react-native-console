@@ -3,13 +3,14 @@ import { View, ScrollView, Text, TextInput, Button, StatusBar, Clipboard } from 
 import React from 'react';
 import { consoleStyles } from './console.styles';
 
-export type ConsoleMessages = Array<{style: object, label: string, message: string}>;
+export type ConsoleMessages = Array<{style: object, label: string, message: string, messagePayload?: string}>;
 
 interface ConsoleProps{
     messages: ConsoleMessages;
     breakpoint: 'mobile'|'tablet';
     enabled: boolean;
     clear(): void;
+    showMessagePayload(i: number): void;
 }
 
 interface ConsoleState {
@@ -83,9 +84,11 @@ export default class Console extends PureComponent<ConsoleProps, ConsoleState> {
     }
     renderMessages = () => {
         const filter = this.state.filter;
-        return this.props.messages.map((e) => {
+        return this.props.messages.map((e, i) => {
             if (filter !== '' && (e.label + ': ' + e.message).toLowerCase().indexOf( filter.toLowerCase()) < 0)
                 return null;
+            if (e.messagePayload)
+                e.message = (<Text onPress={() => {this.props.showMessagePayload(i); }}>( Click to view payload )</Text>) as any as string;
             return <Text style={e.style}><Text style={{fontWeight: 'bold'}}>{e.label}:</Text> {e.message}</Text>;
         });
     }
