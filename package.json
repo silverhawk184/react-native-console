@@ -1,6 +1,6 @@
 {
   "name": "react-native-console-view",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Built in console for react native",
   "main": "src/index.ts",
   "scripts": {
@@ -16,8 +16,7 @@
     "url": "https://github.com/silverhawk184/react-native-console/issues"
   },
   "homepage": "https://github.com/silverhawk184/react-native-console#readme",
-  "dependencies": {
-  },
+  "dependencies": {},
   "dev-dependencies": {
     "@types/node": "^12.7.5",
     "@types/react-native": "^0.60.15",
