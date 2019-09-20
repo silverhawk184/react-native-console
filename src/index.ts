@@ -1,9 +1,3 @@
-import {ConsoleView} from './console/console.container';
-import {console, consoleView} from './console/console.reducer';
+import {ConsoleView, console, consoleView, initConsoleView} from './console/console.container';
 
-interface ConsoleViewStructuredProps {
-    breakpoint?: 'mobile'|'tablet';
-    enabled?: boolean;
-}
-
-export { ConsoleView as default, console, consoleView, ConsoleViewStructuredProps };
+export { ConsoleView, console, consoleView, initConsoleView };

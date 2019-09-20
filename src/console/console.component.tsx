@@ -5,11 +5,8 @@ import { consoleStyles } from './console.styles';
 
 export type ConsoleMessages = Array<{style: object, label: string, message: string}>;
 
-export interface ConsoleStructuredProps {
+interface ConsoleProps{
     messages: ConsoleMessages;
-    messageCount: number;
-}
-interface ConsoleProps extends ConsoleStructuredProps{
     breakpoint: 'mobile'|'tablet';
     enabled: boolean;
     clear(): void;
@@ -42,7 +39,7 @@ export default class Console extends PureComponent<ConsoleProps, ConsoleState> {
     render() {
         const {breakpoint, clear, enabled } = this.props;
         const {visible, barPosition, scrollEnabled } = this.state;
-        const {container, actionBar, actionBarInput, logContainer } = consoleStyles[breakpoint];
+        const {container, actionBar, actionBarInput, logContainer } = consoleStyles.mobile;
         if (!enabled) return null;
         return (
             <View

@@ -6,20 +6,23 @@ Usage:
 **App.tsx**
 
     import React, { Component } from 'react';
-    import ConsoleView from 'react-native-console-view';
+    import { ConsoleView, initConsoleView } from 'react-native-console-view';
+    
     export default class App extends Component<AppProps> {
-    constructor(props: AppProps) {
-        super(props);
-    }
-
-    render {
-        return (
-        <Provider store={store}>
-            ... app stuff ...
-            <ConsoleView enabled={this.showLog} breakpoint="mobile" />
-        </Provider>
-        );
-    }
+        constructor(props: AppProps) {
+            super(props);
+        }
+        componentWillMount() {
+            initConsoleView();
+        }
+        render {
+            return (
+                <Provider store={store}>
+                    ... app stuff ...
+                    <ConsoleView enabled={true} breakpoint="mobile" />
+                </Provider>
+            );
+        }
     }
 
 
@@ -54,3 +57,6 @@ Usage:
     console.logOnChange('Location Updated', {lat: 8, lon: 9}); // displays `Location Updated: no change` in a slightly transparent font
 
     console.error('Response', 'invalid data'); // displays `Response: invalid data` in a red font
+
+### Other
+And best of all, no extra dependencies!
