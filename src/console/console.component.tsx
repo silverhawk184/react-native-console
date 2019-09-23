@@ -1,9 +1,17 @@
 import { PureComponent } from 'react';
-import { View, ScrollView, Text, TextInput, Button, StatusBar, Clipboard } from 'react-native';
+import { View, ScrollView, Text, TextInput, Button, StatusBar, Clipboard, Share, Alert } from 'react-native';
 import React from 'react';
 import { consoleStyles } from './console.styles';
 
-export type ConsoleMessages = Array<{style: object, label: string, message: string, messagePayload?: string}>;
+interface ConsoleMessage {
+    style: object;
+    label: string;
+    message: string;
+    messagePayload?: string;
+    timestamp: Date;
+}
+
+export type ConsoleMessages = ConsoleMessage[];
 
 interface ConsoleProps{
     messages: ConsoleMessages;
@@ -84,12 +92,13 @@ export default class Console extends PureComponent<ConsoleProps, ConsoleState> {
     }
     renderMessages = () => {
         const filter = this.state.filter;
-        return this.props.messages.map((e, i) => {
+        return this.props.messages.map((e: ConsoleMessage, i) => {
             if (filter !== '' && (e.label + ': ' + e.message).toLowerCase().indexOf( filter.toLowerCase()) < 0)
                 return null;
             if (e.messagePayload)
                 e.message = (<Text onPress={() => {this.props.showMessagePayload(i); }}>( Click to view payload )</Text>) as any as string;
-            return <Text style={e.style}><Text style={{fontWeight: 'bold'}}>{e.label}:</Text> {e.message}</Text>;
+            const timestamp = `${e.timestamp.getHours().toString().padStart(2, '0')}:${e.timestamp.getMinutes().toString().padStart(2, '0')}:${e.timestamp.getSeconds().toString().padStart(2, '0')}`;
+            return <Text style={e.style}>{timestamp} <Text style={{fontWeight: 'bold'}}>{e.label}:</Text> {e.message}</Text>;
         });
     }
     toggleShow = () => {
@@ -107,13 +116,30 @@ export default class Console extends PureComponent<ConsoleProps, ConsoleState> {
     handleLogSizeChange = () => {
         this.logRef!.scrollToEnd({animated: true});
     }
-    handleClipboard = () => {
+    handleClipboard = async () => {
         const filter = this.state.filter;
-        const log = this.props.messages.map((e) => {
+        const textLog = this.props.messages.map((e) => {
             if (filter !== '' && (e.label + ': ' + e.message).toLowerCase().indexOf( filter.toLowerCase()) < 0)
                 return '';
-            return `${e.label}: ${e.message}\n`;
+            const message = e.messagePayload ? e.messagePayload : e.message;
+            const timestamp = `${e.timestamp.getHours().toString().padStart(2, '0')}:${e.timestamp.getMinutes().toString().padStart(2, '0')}:${e.timestamp.getSeconds().toString().padStart(2, '0')}`;
+            return `${timestamp} ${e.label}: ${message}\n`;
         }).join('');
-        Clipboard.setString(log);
+
+        const csvLog = this.props.messages.map((e) => {
+            if (filter !== '' && (e.label + ': ' + e.message).toLowerCase().indexOf( filter.toLowerCase()) < 0)
+                return '';
+            const timestamp = e.timestamp.toISOString();
+            const label = '"' + (e.label.replace(/\"/g, '""')) + '"';
+            let message = e.messagePayload ? e.messagePayload : e.message;
+            message = '"' + (message.replace(/\"/g, '""')) + '"';
+            return `${timestamp},${label},${message}\n`;
+        }).join('');
+
+        Clipboard.setString(textLog);
+        await Share.share({
+            message: csvText,
+            //url: 'data:text/csv;base64,' + atob(csvLog), //TODO coming in react-native-community
+        });
     }
 }

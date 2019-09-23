@@ -3,6 +3,7 @@
     "extends": [
         "tslint:recommended"
     ],
+    "target": "es2017",
     "linterOptions": {
         "exclude": [
             "src/_sample-data/*.ts"

@@ -80,7 +80,7 @@ export const console = {
             messagePayload = JSON.stringify(message, getCircularReplacer(), 2);
             message = '';
         }
-        globalAny.consoleView.messages.push({label, message, messagePayload, style});
+        globalAny.consoleView.messages.push({label, message, messagePayload, style, timestamp: new Date()});
         globalAny.consoleView.ref.forceUpdate();
     },
     time: (label: string, style: TextStyle = {}) => {
