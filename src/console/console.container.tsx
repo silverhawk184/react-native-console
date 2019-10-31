@@ -1,5 +1,5 @@
 import { View, TextStyle } from 'react-native';
-import Console, { ConsoleMessages } from 'react-native-console-view/src/console/console.component';
+import Console, { ConsoleMessages } from './console.component';
 import { PureComponent } from 'react';
 import React from 'react';
 

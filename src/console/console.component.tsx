@@ -1,5 +1,5 @@
 import { PureComponent } from 'react';
-import { View, ScrollView, Text, TextInput, Button, StatusBar, Clipboard, Share, Alert } from 'react-native';
+import { View, ScrollView, Text, TextInput, Button, StatusBar, Clipboard, Share, SafeAreaView } from 'react-native';
 import React from 'react';
 import { consoleStyles } from './console.styles';
 
@@ -51,7 +51,7 @@ export default class Console extends PureComponent<ConsoleProps, ConsoleState> {
         const {container, actionBar, actionBarInput, logContainer } = consoleStyles.mobile;
         if (!enabled) return null;
         return (
-            <View
+            <SafeAreaView
                 pointerEvents='box-none'
                 style={[
                     container,
@@ -87,7 +87,7 @@ export default class Console extends PureComponent<ConsoleProps, ConsoleState> {
                         </View>
                     </View>
                 )}
-            </View>
+            </SafeAreaView>
         );
     }
     renderMessages = () => {
@@ -138,7 +138,7 @@ export default class Console extends PureComponent<ConsoleProps, ConsoleState> {
 
         Clipboard.setString(textLog);
         await Share.share({
-            message: csvText,
+            message: textLog,
             //url: 'data:text/csv;base64,' + atob(csvLog), //TODO coming in react-native-community
         });
     }
