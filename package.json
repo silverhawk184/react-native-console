@@ -1,6 +1,6 @@
 {
   "name": "react-native-console-view",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Built in console for react native",
   "main": "src/index.ts",
   "scripts": {
