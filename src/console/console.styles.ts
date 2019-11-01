@@ -1,6 +1,4 @@
-
 import { StyleSheet, ViewStyle } from 'react-native';
-import { merge, cloneDeep } from 'lodash';
 
 // Interface to describe raw styles (some styles like flexDirection)
 // do not apply to some styles like ImageStyle
@@ -12,7 +10,7 @@ interface ConsoleStyle {
 }
 
 // Raw Styles for Mobile Stylesheet
-const consoleRawStylesMobile: ConsoleStyle = {
+const mobile: ConsoleStyle = {
     container: {
         position: 'absolute',
         top: 0,
@@ -43,12 +41,9 @@ const consoleRawStylesMobile: ConsoleStyle = {
 
 // Raw Styles for Tablet Stylesheet
 // [NOTE]: Tablet merges mobile to make sure everything on mobile is available on tablet
-const consoleRawStylesTablet: ConsoleStyle = merge(
-  cloneDeep(consoleRawStylesMobile),
-  {},
-);
+const tablet: ConsoleStyle = mobile;
 
 export const consoleStyles = {
-  mobile: StyleSheet.create(consoleRawStylesMobile),
-  tablet: StyleSheet.create(consoleRawStylesTablet),
+  mobile: StyleSheet.create(mobile),
+  tablet: StyleSheet.create(tablet),
 };
