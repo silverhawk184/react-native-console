@@ -26,6 +26,7 @@ interface ConsoleState {
     visible: boolean;
     barPosition: 'top'|'bottom';
     scrollEnabled: boolean;
+    timeStampDisplayFormat: 'clock'|'sinceOpen'|'sinceLastMessage'|'sinceLastByLabel'|'none';
 }
 
 export default class Console extends PureComponent<ConsoleProps, ConsoleState> {
@@ -35,14 +36,19 @@ export default class Console extends PureComponent<ConsoleProps, ConsoleState> {
     };
 
     logRef: ScrollView|null = null;
+    timeStampAppOpened = 0;
+    timeStampLastMessage = 0;
+    timeStampLastByLabel: {[index: string]: number} = {};
 
     constructor(props: ConsoleProps) {
         super(props);
+        this.timeStampAppOpened = this.timeStampLastMessage = new Date().getTime();
         this.state = {
             filter: '',
             visible: true,
             barPosition: 'bottom',
             scrollEnabled: false,
+            timeStampDisplayFormat: 'none',
          };
     }
     render() {
@@ -97,8 +103,41 @@ export default class Console extends PureComponent<ConsoleProps, ConsoleState> {
                 return null;
             if (e.messagePayload)
                 e.message = (<Text onPress={() => {this.props.showMessagePayload(i); }}>( Click to view payload )</Text>) as any as string;
-            const timestamp = `${e.timestamp.getHours().toString().padStart(2, '0')}:${e.timestamp.getMinutes().toString().padStart(2, '0')}:${e.timestamp.getSeconds().toString().padStart(2, '0')}`;
-            return <Text style={e.style}>{timestamp} <Text style={{fontWeight: 'bold'}}>{e.label}:</Text> {e.message}</Text>;
+
+            let timestamp = '';
+            let ts = 0;
+            switch (this.state.timeStampDisplayFormat){
+                case 'clock':
+                    const h = e.timestamp.getHours().toString().padStart(2, '0');
+                    const m = e.timestamp.getMinutes().toString().padStart(2, '0');
+                    const s = e.timestamp.getSeconds().toString().padStart(2, '0');
+                    timestamp = `${h}:${m}:${s}`;
+                    break;
+                case 'sinceOpen':
+                    timestamp = this.formatTimestampSeconds(e.timestamp.getTime() - this.timeStampAppOpened);
+                    break;
+                case 'sinceLastMessage':
+                    ts = e.timestamp.getTime();
+                    timestamp = (
+                        <React.Fragment>
+                            <Text style={{color: '#ddd'}}>+</Text>
+                            {this.formatTimestampSeconds(ts - this.timeStampLastMessage)}
+                        </React.Fragment>
+                    ) as any as string;
+                    this.timeStampLastMessage = ts;
+                    break;
+                case 'sinceLastByLabel':
+                    ts = e.timestamp.getTime();
+                    if (typeof this.timeStampLastByLabel[e.label] !== 'number') this.timeStampLastByLabel[e.label] = ts;
+                    timestamp = '+' + this.formatTimestampSeconds(ts - this.timeStampLastByLabel[e.label]);
+                    this.timeStampLastByLabel[e.label] = ts;
+                    break;
+                case 'none':
+                    timestamp = '[\u23F1]';
+                    break;
+            }
+
+            return <Text style={e.style} onPress={() => {this.cycleTimeStampDisplayFormats(); }}>{timestamp} <Text style={{fontWeight: 'bold'}}>{e.label}:</Text> {e.message}</Text>;
         });
     }
     toggleShow = () => {
@@ -141,5 +180,32 @@ export default class Console extends PureComponent<ConsoleProps, ConsoleState> {
             message: textLog,
             //url: 'data:text/csv;base64,' + atob(csvLog), //TODO coming in react-native-community
         });
+    }
+
+    formatTimestampSeconds = (milliseconds: number) => {
+        milliseconds = Math.max(0, milliseconds);
+        let time = (Math.round(milliseconds / 10) / 100).toFixed(2);
+        time = time.padStart(6, '0'); // keep alignment for 8 digits (16.65 minutes), then will go to 9 digits (2.77 hours) ...
+        return time + 's';
+    }
+
+    cycleTimeStampDisplayFormats = () => {
+         switch (this.state.timeStampDisplayFormat){
+            case 'clock':
+                this.setState({timeStampDisplayFormat: 'sinceOpen'});
+                break;
+            case 'sinceOpen':
+                this.setState({timeStampDisplayFormat: 'sinceLastMessage'});
+                break;
+            case 'sinceLastMessage':
+                this.setState({timeStampDisplayFormat: 'sinceLastByLabel'});
+                break;
+            case 'sinceLastByLabel':
+                this.setState({timeStampDisplayFormat: 'none'});
+                break;
+            case 'none':
+                this.setState({timeStampDisplayFormat: 'clock'});
+                break;
+        }
     }
 }
