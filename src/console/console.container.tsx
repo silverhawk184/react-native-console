@@ -74,7 +74,7 @@ export const console = {
         console.append(label, message, {color: '#FF0000'});
     },
     append: (label: string, message: string|object = '', style: TextStyle = {color: '#FFFFFF'}) => {
-        if (!globalAny.consoleView.enabled || !globalAny.consoleView.ref) return;
+        if (!globalAny || !globalAny.consoleView || !globalAny.consoleView.enabled || !globalAny.consoleView.ref) return;
         let messagePayload;
         if (typeof message === 'object'){
             messagePayload = JSON.stringify(message, getCircularReplacer(), 2);
@@ -84,7 +84,7 @@ export const console = {
         globalAny.consoleView.ref.forceUpdate();
     },
     time: (label: string, style: TextStyle = {}) => {
-        if (!globalAny.consoleView.enabled) return;
+        if (!globalAny || !globalAny.consoleView || !globalAny.consoleView.enabled) return;
         globalAny.consoleView.timers[label] = {startTime: Date.now(), style};
     },
     timeEnd: (label: string) => {
