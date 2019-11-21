@@ -74,7 +74,13 @@ export const console = {
         console.append(label, message, {color: '#FF0000'});
     },
     append: (label: string, message: string|object = '', style: TextStyle = {color: '#FFFFFF'}) => {
-        if (!globalAny || !globalAny.consoleView || !globalAny.consoleView.enabled || !globalAny.consoleView.ref) return;
+        if (
+            !globalAny ||
+            !globalAny.consoleView ||
+            !globalAny.consoleView.enabled ||
+            !globalAny.consoleView.ref
+        ) return;
+
         let messagePayload;
         if (typeof message === 'object'){
             messagePayload = JSON.stringify(message, getCircularReplacer(), 2);
@@ -88,19 +94,38 @@ export const console = {
         globalAny.consoleView.timers[label] = {startTime: Date.now(), style};
     },
     timeEnd: (label: string) => {
-        if (!globalAny.consoleView.timers[label]) return;
+        if (
+            !globalAny ||
+            !globalAny.consoleView ||
+            !globalAny.consoleView.timers ||
+            !globalAny.consoleView.timers[label]
+        ) return;
+
         const {startTime, style}  = globalAny.consoleView.timers[label];
         const curTime = Date.now();
         console.append(label, `${curTime - startTime}ms - timer ended`, {color: '#00FF00', ...style});
         delete globalAny.consoleView.timers[label];
     },
     timeLog: (label: string) => {
-        if (typeof globalAny.consoleView.timers[label] === 'undefined') return;
+        if (
+            !globalAny ||
+            !globalAny.consoleView ||
+            !globalAny.consoleView.timers ||
+            !globalAny.consoleView.timers[label]
+        ) return;
+
         const {startTime, style}  = globalAny.consoleView.timers[label];
         const curTime = Date.now();
         console.append(label, `${curTime - startTime}ms`, {color: '#00FF00', ...style});
     },
     logOnChange: (label: string, message: string|object, style: TextStyle) => {
+        if (
+            !globalAny ||
+            !globalAny.consoleView ||
+            !globalAny.consoleView.logOnChangeHistory
+        )
+            return;
+
         const testMessage = (typeof message === 'object') ? JSON.stringify(message) : message;
         style = {color: '#FF00FF', ...style};
         if (
