@@ -137,7 +137,7 @@ export default class Console extends PureComponent<ConsoleProps, ConsoleState> {
                     break;
             }
 
-            return <Text style={e.style} onPress={() => {this.cycleTimeStampDisplayFormats(); }}>{timestamp} <Text style={{fontWeight: 'bold'}}>{e.label}:</Text> {e.message}</Text>;
+            return <Text key={`cm-${i}`} style={e.style} onPress={() => {this.cycleTimeStampDisplayFormats(); }}>{timestamp} <Text style={{fontWeight: 'bold'}}>{e.label}:</Text> {e.message}</Text>;
         });
     }
     toggleShow = () => {

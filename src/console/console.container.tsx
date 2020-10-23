@@ -133,7 +133,7 @@ export const console = {
             globalAny.consoleView.logOnChangeHistory[label] !== testMessage
         ) console.append(label, message, style);
         else {
-            if (style.color!.length === 7) style.color += '55'; //slightly transparent
+            if (typeof style.color === 'string' && style.color!.length === 7) style.color += '55'; //slightly transparent
             console.append(label, 'no change', {fontStyle: 'italic', ...style});
         }
         globalAny.consoleView.logOnChangeHistory[label] = testMessage;
@@ -144,12 +144,12 @@ export const consoleView = console;
 const getCircularReplacer = () => {
     const seen = new WeakSet();
     return (key: any, value: any) => {
-      if (typeof value === 'object' && value !== null) {
-        if (seen.has(value)) {
-          return;
+        if (typeof value === 'object' && value !== null) {
+            if (seen.has(value)) {
+                return;
+            }
+            seen.add(value);
         }
-        seen.add(value);
-      }
-      return value;
+        return value;
     };
-  };
+};
