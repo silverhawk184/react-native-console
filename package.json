@@ -20,7 +20,7 @@
     "@types/lodash": "^4.14.144"
   },
   "devDependencies": {
-    "@types/node": "^12.7.5",
+    "@types/node": "^14.14.7",
     "@types/react-native": "^0.63.30",
     "react": "^17.0.1",
     "react-native": "^0.59.10"
