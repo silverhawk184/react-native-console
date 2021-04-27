@@ -1,5 +1,5 @@
-import { PureComponent } from 'react';
-import { View, ScrollView, Text, TextInput, Button, StatusBar, Clipboard, Share, SafeAreaView } from 'react-native';
+import { FC, PureComponent } from 'react';
+import { View, ScrollView, Text, TextInput, StatusBar, Clipboard, Share, SafeAreaView, Pressable } from 'react-native';
 import React from 'react';
 import { consoleStyles } from './console.styles';
 
@@ -18,6 +18,7 @@ interface ConsoleProps{
     breakpoint: 'mobile'|'tablet';
     enabled: boolean;
     clear(): void;
+    reset(): void;
     showMessagePayload(i: number): void;
 }
 
@@ -52,7 +53,7 @@ export default class Console extends PureComponent<ConsoleProps, ConsoleState> {
          };
     }
     render() {
-        const {breakpoint, clear, enabled } = this.props;
+        const {clear, reset, enabled } = this.props;
         const {visible, barPosition, scrollEnabled } = this.state;
         const {container, actionBar, actionBarInput, logContainer } = consoleStyles.mobile;
         if (!enabled) return null;
@@ -72,7 +73,7 @@ export default class Console extends PureComponent<ConsoleProps, ConsoleState> {
                     <Button onPress={this.togglePosition} title={barPosition === 'bottom' ? '\u25BD' : '\u25B3'} color='#dc3545' />
                     <Button onPress={this.toggleScroll} title={scrollEnabled ? '\u2226' : '\u21C5'} color='#ffc108' />
                     <Button onPress={this.handleClipboard} title={'\u2398'} color='#6c757d' />
-                    <Button onPress={clear} title='_' color='#17a2b8' />
+                    <Button onPress={clear} onLongPress={reset} title='_' color='#17a2b8' />
                     <TextInput onChangeText={this.updateFilter} style={actionBarInput} />
                 </View>
                 {scrollEnabled ? ( /* {scrollEnabled ? 'auto' : 'none'} doesn't work on ScrollView */
@@ -209,3 +210,13 @@ export default class Console extends PureComponent<ConsoleProps, ConsoleState> {
         }
     }
 }
+
+interface ButtonProps {
+    color: string;
+    title: string;
+    onPress(): void;
+    onLongPress?(): void;
+}
+const Button: FC<ButtonProps> = ({color, title, onPress, onLongPress}) => {
+    return <Pressable onPress={onPress} onLongPress={onLongPress}><Text style={[consoleStyles.mobile.button, {backgroundColor: color}]}>{title}</Text></Pressable>;
+};
