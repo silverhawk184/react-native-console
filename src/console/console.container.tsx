@@ -1,4 +1,4 @@
-import { View, TextStyle } from 'react-native';
+import { View, TextStyle, DevSettings, Image } from 'react-native';
 import Console, { ConsoleMessages } from './console.component';
 import { PureComponent } from 'react';
 import React from 'react';
@@ -26,6 +26,7 @@ export const initConsoleView = () => {
 interface ConsoleViewProps {
     enabled: boolean;
     breakpoint: 'mobile'|'tablet';
+    onReset?(): Promise<void>;
 }
 export class ConsoleView extends PureComponent<ConsoleViewProps> {
     render() {
@@ -41,6 +42,7 @@ export class ConsoleView extends PureComponent<ConsoleViewProps> {
                 messages={messages}
                 ref={this.handleRef}
                 clear={this.handleClear}
+                reset={this.handleReset}
                 showMessagePayload={this.handleShowMessagePayload}
             />
         );
@@ -52,6 +54,11 @@ export class ConsoleView extends PureComponent<ConsoleViewProps> {
         setTimeout(() => {
             globalAny.consoleView.ref!.forceUpdate();
         }, 100);
+    }
+    handleReset = async () => {
+        if (this.props.onReset) await this.props.onReset();
+        DevSettings.reload();
+        console.append('\u27F3\u27F3\u27F3\u27F3\u27F3\u27F3\u27F3\u27F3\u27F3\u27F3\u27F3\u27F3\u27F3\u27F3', undefined, {backgroundColor: '#76D7EA', color: 'black'});
     }
     handleShowMessagePayload = (i: number) => {
         globalAny.consoleView.messages[i].message = globalAny.consoleView.messages[i].messagePayload as string;

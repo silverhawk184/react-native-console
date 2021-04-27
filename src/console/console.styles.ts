@@ -1,4 +1,4 @@
-import { StyleSheet, ViewStyle } from 'react-native';
+import { StyleSheet, TextStyle, ViewStyle } from 'react-native';
 
 // Interface to describe raw styles (some styles like flexDirection)
 // do not apply to some styles like ImageStyle
@@ -7,7 +7,10 @@ interface ConsoleStyle {
     actionBar: ViewStyle;
     actionBarInput: ViewStyle;
     logContainer: ViewStyle;
+    button: TextStyle;
 }
+
+const actionBarHeight = 31;
 
 // Raw Styles for Mobile Stylesheet
 const mobile: ConsoleStyle = {
@@ -25,17 +28,25 @@ const mobile: ConsoleStyle = {
         alignItems: 'center',
         marginHorizontal: 0,
         paddingHorizontal: 0,
-        height: 44,
+        height: actionBarHeight,
         backgroundColor: '#000000cc',
     },
     actionBarInput: {
-        height: 44,
+        height: actionBarHeight,
         width: '66%',
         backgroundColor: '#FFFFFF',
     },
     logContainer: {
         backgroundColor: '#000000cc',
         height: '95%',
+    },
+    button: {
+        padding: 6,
+        marginHorizontal: 1,
+        margin: 0,
+        alignItems: 'stretch',
+        justifyContent: 'center',
+        color: 'white',
     },
 };
 
